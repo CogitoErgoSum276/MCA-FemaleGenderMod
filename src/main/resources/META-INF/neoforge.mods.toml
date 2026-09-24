@@ -15,7 +15,7 @@ license = "LGPL-3.0-only"
 
 本模组基于 Female Gender Mod（LGPL-3.0）移植并修改而来。
 '''
-    authors = "cogitoergosun024"
+    authors = "CogitoErgoSum276"
     credits = "基于 WildfireRomeo 的 Female Gender Mod（LGPL-3.0）移植与修改。"
 
 [[dependencies.mcabp]]
