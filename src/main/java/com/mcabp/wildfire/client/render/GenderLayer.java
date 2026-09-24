@@ -562,8 +562,14 @@ public class GenderLayer<ENTITY extends LivingEntity, MODEL extends HumanoidMode
 				matrixStack.translate(0.0625f * 2 * (left ? 1 : -1), 0, 0);
 			}
 
-			// 基础前倾角：始终以罩杯尺寸为基准，罩杯越大垂得越自然。
-			// 参考 FGM 原设计，罩杯 0.7 时约 -24.5 度；MCA 原版则是固定 54 度。
+			// 基础前倾角：始终以罩杯尺寸为基准。
+			//
+			// 角度系数取 54 是刻意对齐 MCA 原版：MCA 的胸部几何体固定前倾 54.2 度
+			// （CommonVillagerModel#applyVillagerDimensions 里的 setRotation(0.9424779F, 0, 0)）。
+			// FGM 原版这里是 35 —— 罩杯 0.7 只算到约 24.5 度、常见的 0.85 也只有 29.8 度，
+			// 观感上明显比 MCA 原版塌，玩家会直接看出"胸部变塌了"。
+			// 改成 54 之后：rotation 到 1 时正好 54 度（等于原版），
+			// 常见的 0.85 落在约 45.9 度，整体挺度与原版持平。
 			float rotation = breastSize;
 			if (bounceEnabled) {
 				// 按尺寸微微下移，补偿几何盒旋转后视觉重心的偏移
@@ -592,12 +598,12 @@ public class GenderLayer<ENTITY extends LivingEntity, MODEL extends HumanoidMode
 			// 两半才会各自向外张开。若调用方也取一次负，两次负号抵消，两个胸会朝同一侧转。
 			float outwardRad = outwardAngle * Mth.DEG_TO_RAD;
 			// JOML 的链式调用是「右乘」，也就是局部旋转，所以实际生效顺序与书写顺序相反：
-			//   先绕 X 轴前倾（-35 度 × rotation，rotation 越大垂得越狠）
+			//   先绕 X 轴前倾（-54 度 × rotation，rotation 越大越挺）
 			//   再绕 Y 轴向外张开（张角由乳沟参数决定）
 			// 这个顺序很关键：交换两者会让"向外张"变成"绕世界 Y 轴旋转"，姿势立刻失真。
 			Quaternionf rotationTransform = new Quaternionf()
 				.rotationY(left ? outwardRad : -outwardRad)
-				.rotateX(-35F * rotation * Mth.DEG_TO_RAD);
+				.rotateX(-54F * rotation * Mth.DEG_TO_RAD);
 
 			// 呼吸起伏：用一条余弦波驱动额外的前倾角。
 			//   tickCount * 0.09 是相位，周期 = 2π/0.09 ≈ 70 tick ≈ 3.5 秒一次呼吸
