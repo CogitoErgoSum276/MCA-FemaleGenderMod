@@ -4,7 +4,7 @@ license = "LGPL-3.0-only"
 
 [[mods]]
     modId = "mcabp"
-    version = "0.1.0"
+    version = "0.1.1"
     displayName = "MCA Female Gender Mod"
     logoFile = "logo.png"
     description = '''
@@ -26,7 +26,9 @@ license = "LGPL-3.0-only"
 [[dependencies.mcabp]]
     modId = "neoforge"
     type = "required"
-    versionRange = "[21.1.234,)"
+    # 本模组只用到 21.1.x 全系长期稳定的 API，不依赖任何 21.1.234 新增接口，
+    # 因此下限放到 21.1.0，避免把跑较早 21.1.x 的服务器挡在门外。
+    versionRange = "[21.1.0,)"
     side = "BOTH"
 [[dependencies.mcabp]]
     modId = "mca"

@@ -31,7 +31,7 @@ Size and shape are driven by MCA's genetics system, so they are inherited, rando
 | Component | Version |
 |---|---|
 | Minecraft | 1.21.1 |
-| NeoForge | 21.1.234 or newer |
+| NeoForge | 21.1.0 or newer |
 | MCA (Minecraft Comes Alive) | 7.7.x |
 
 ### Installation
@@ -40,7 +40,7 @@ Size and shape are driven by MCA's genetics system, so they are inherited, rando
 
 This is not a suggestion. The mod appends synced fields to MCA's gene pool, and the network protocol identifies those fields by index. Installing it on one side only will **silently** corrupt villager data (gender, name, genes) instead of crashing, which makes it far harder to diagnose.
 
-1. Install Minecraft 1.21.1 with NeoForge 21.1.234+
+1. Install Minecraft 1.21.1 with NeoForge 21.1.0+
 2. Put MCA into the `mods` folder
 3. Put this mod's jar into the `mods` folder **on both the client and the server**
 4. Launch the game
@@ -112,7 +112,7 @@ Released under **LGPL-3.0**, matching the upstream mod it derives from.
 | 组件 | 版本 |
 |---|---|
 | Minecraft | 1.21.1 |
-| NeoForge | 21.1.234 或更新 |
+| NeoForge | 21.1.0 或更新 |
 | MCA（凡家物语） | 7.7.x |
 
 ### 安装
@@ -121,7 +121,7 @@ Released under **LGPL-3.0**, matching the upstream mod it derives from.
 
 这不是建议。本模组向 MCA 的基因池追加了同步字段，而网络协议是按序号识别这些字段的。只装一端会**静默地**弄乱村民数据（性别、名字、基因），而不是直接崩溃，所以排查起来更麻烦。
 
-1. 安装 Minecraft 1.21.1 与 NeoForge 21.1.234+
+1. 安装 Minecraft 1.21.1 与 NeoForge 21.1.0+
 2. 把 MCA 放进 `mods` 文件夹
 3. **在客户端与服务端的 `mods` 文件夹里都放入本模组的 jar**
 4. 启动游戏
