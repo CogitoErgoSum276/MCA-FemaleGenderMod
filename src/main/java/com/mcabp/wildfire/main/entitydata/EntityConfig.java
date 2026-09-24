@@ -71,14 +71,29 @@ public class EntityConfig {
               }
           });
 
-    /** MCA 的罩杯基因（0~1）映射到 FGM 罩杯范围（0~0.8）时使用的上限。 */
-    private static final float MAX_BUST_SIZE = 0.8F;
+    /**
+     * 罩杯基因（0~1）换算成 FGM 罩杯量纲时使用的上限。
+     *
+     * <p>FGM 自己的罩杯范围是 {@code [0, 0.8]}（见 {@code ClientConfiguration.BUST_SIZE}），
+     * 这里刻意取 1.0 而不是 0.8。</p>
+     *
+     * <p><b>为什么超出 FGM 的范围</b>：本模组关掉了 MCA 自带的村民胸部几何体
+     * （见 {@code WildfireGenderClient#disableMcaBreasts}），必须由这一套几何体
+     * 独自顶替它的观感。而 MCA 原版的凸出量本来就比 FGM 在 0.8 上限下更大 ——
+     * 按 0.8 换算时凸出量偏小，观感上村民的胸部比装本模组之前更平，
+     * 且约 87% 的女村民落在 {@code GenderLayer} 的尺寸地板之下、凸出量几乎一样。</p>
+     *
+     * <p>取 1.0 并配合 {@code GenderLayer} 里上调过的尺寸地板，凸出量才与原版持平：
+     * 基因 0.2 时约 1.2 像素（原版约 1.2）、0.5 时约 1.8（原版约 1.7）、
+     * 1.0 时约 3.0（原版约 2.7）。</p>
+     */
+    private static final float MAX_BUST_SIZE = 1.0F;
 
     /**
      * 怀孕二次发育的倍率上限：自然生成的最大值还能再涨 25%。
      *
-     * <p>所以罩杯的实际上限是 {@code MAX_BUST_SIZE × MAX_GROWTH = 1.0}，
-     * 比 FGM 自己允许的 0.8 更大 —— 这正是「二次发育能突破自然上限」的体现。</p>
+     * <p>所以罩杯的实际上限是 {@code MAX_BUST_SIZE × MAX_GROWTH = 1.25}，
+     * 比自然生成的上限更高 —— 这正是「二次发育能突破自然上限」的体现。</p>
      */
     public static final float MAX_GROWTH = 1.25F;
 
@@ -119,7 +134,8 @@ public class EntityConfig {
     // 以下字段的初值都取自 ClientConfiguration 的默认值，
     // 这样即便从未被显式设置过，行为也与配置系统声明的默认值一致
     protected Gender gender = ClientConfiguration.GENDER.getDefault();
-    // 罩杯大小，范围 0~0.8。MCA 村民由 syncFromVillager 每 tick 从基因同步，
+    // 罩杯大小，范围 0 ~ MAX_BUST_SIZE × MAX_GROWTH（即 0~1.25，怀孕后可达上限）。
+    // MCA 村民由 syncFromVillager 每 tick 从基因同步，
     // 这里的初值只用于"尚未同步过"的短暂时刻
     protected float pBustSize = ClientConfiguration.BUST_SIZE.getDefault();
 
@@ -297,9 +313,8 @@ public class EntityConfig {
      * 把 MCA 村民的性别与各项胸部基因同步到本配置对象。
      *
      * <p>MCA 的 {@code Genetics.BREAST} 基因是一个 {@code [0,1]} 的浮点数，
-     * 并且 {@code Genetics#getBreastSize()} 在非女性时直接返回 0；而 FGM 的罩杯参数
-     * 范围是 {@code [0, 0.8]}（见 {@code ClientConfiguration.BUST_SIZE}），
-     * 因此这里乘 {@link #MAX_BUST_SIZE} 做一次归一化。</p>
+     * 并且 {@code Genetics#getBreastSize()} 在非女性时直接返回 0；
+     * 这里乘 {@link #MAX_BUST_SIZE} 把它换算成 FGM 的罩杯量纲。</p>
      *
      * <p>再乘上年龄成长系数（见 {@link #chestGrowthByAge}），把「什么时候开始发育」
      * 这件事交给年龄段控制：儿童及以前完全不发育，进入青春期后才从零开始长。</p>

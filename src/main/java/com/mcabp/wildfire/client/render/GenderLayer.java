@@ -324,10 +324,15 @@ public class GenderLayer<ENTITY extends LivingEntity, MODEL extends HumanoidMode
 			// 公式等价于 (1 - bSize) / 16，即罩杯越大、往外推的基准量越小
 			// （罩杯大时由几何盒自身的深度撑开，不需要额外的基准偏移）。
 			float zOff = 0.0625f - (bSize * 0.0625f);
-			// 最终尺寸映射：bSize + |bSize - 0.7|，是一个以 0.7 为拐点的分段函数：
-			//   bSize <= 0.7 时 → 恒等于 0.7（小罩杯统一按 0.7 渲染，避免过小看不出起伏）
-			//   bSize >  0.7 时 → 2 * bSize - 0.7（大罩杯以两倍斜率放大，差异更明显）
-			breastSize = bSize + 0.5f * Math.abs(bSize - 0.7f) * 2f;
+			// 最终尺寸映射：bSize + |bSize - 0.85|，是一个以 0.85 为拐点的分段函数：
+			//   bSize <= 0.85 时 → 恒等于 0.85（小罩杯统一按 0.85 渲染，避免过小看不出起伏）
+			//   bSize >  0.85 时 → 2 * bSize - 0.85（大罩杯以两倍斜率放大，差异更明显）
+			//
+			// 拐点由 FGM 原版的 0.7 上调到 0.85：本模组关掉了 MCA 自带的村民胸部
+			// 几何体（见 WildfireGenderClient#disableMcaBreasts），这一层要独自顶替
+			// 它的观感。沿用 0.7 的话，约 85% 的女村民会被压到同一个偏平的尺寸上，
+			// 看上去比装本模组之前更小；0.85 才能与原版的凸出量持平。
+			breastSize = bSize + 0.5f * Math.abs(bSize - 0.85f) * 2f;
 
 			//If the armor physics is overridden ignore resistance
 			// 胸甲对晃动的「抗性」：0 表示完全不阻碍（正常晃），1 表示完全固定。
