@@ -324,15 +324,17 @@ public class GenderLayer<ENTITY extends LivingEntity, MODEL extends HumanoidMode
 			// 公式等价于 (1 - bSize) / 16，即罩杯越大、往外推的基准量越小
 			// （罩杯大时由几何盒自身的深度撑开，不需要额外的基准偏移）。
 			float zOff = 0.0625f - (bSize * 0.0625f);
-			// 最终尺寸映射：bSize + |bSize - 0.85|，是一个以 0.85 为拐点的分段函数：
-			//   bSize <= 0.85 时 → 恒等于 0.85（小罩杯统一按 0.85 渲染，避免过小看不出起伏）
-			//   bSize >  0.85 时 → 2 * bSize - 0.85（大罩杯以两倍斜率放大，差异更明显）
+			// 尺寸映射：把 [0,1] 的 bSize 线性映射到 [0.55, 1.0]，
+			// 结果同时用作前倾角基准与下移量基准。
 			//
-			// 拐点由 FGM 原版的 0.7 上调到 0.85：本模组关掉了 MCA 自带的村民胸部
-			// 几何体（见 WildfireGenderClient#disableMcaBreasts），这一层要独自顶替
-			// 它的观感。沿用 0.7 的话，约 85% 的女村民会被压到同一个偏平的尺寸上，
-			// 看上去比装本模组之前更小；0.85 才能与原版的凸出量持平。
-			breastSize = bSize + 0.5f * Math.abs(bSize - 0.85f) * 2f;
+			// 这里刻意不用 FGM 原版的地板式映射（bSize + |bSize - 拐点|）——
+			// 那种写法会把拐点以下的 bSize 全部压成同一个值，等于直接抹掉"胸小"这一档：
+			// 拐点在 0.7 时约 87% 的女村民落到地板下，抬到 0.85 也还有 85%。
+			// 表现就是小胸与大胸算出完全相同的前倾角，看起来一样大、彼此没有区分度。
+			//
+			// 线性映射保留了完整区分度：bSize 为 0 时仍有凸出（约 0.6 像素），
+			// 到 1 时最大（约 3.9 像素）；MCA 原版的对应范围是 0.8~2.7 像素。
+			breastSize = 0.55f + 0.45f * bSize;
 
 			//If the armor physics is overridden ignore resistance
 			// 胸甲对晃动的「抗性」：0 表示完全不阻碍（正常晃），1 表示完全固定。
@@ -562,14 +564,13 @@ public class GenderLayer<ENTITY extends LivingEntity, MODEL extends HumanoidMode
 				matrixStack.translate(0.0625f * 2 * (left ? 1 : -1), 0, 0);
 			}
 
-			// 基础前倾角：始终以罩杯尺寸为基准。
+			// 基础前倾角：始终以罩杯尺寸为基准，系数 50 决定"挺"到什么程度。
 			//
-			// 角度系数取 54 是刻意对齐 MCA 原版：MCA 的胸部几何体固定前倾 54.2 度
-			// （CommonVillagerModel#applyVillagerDimensions 里的 setRotation(0.9424779F, 0, 0)）。
-			// FGM 原版这里是 35 —— 罩杯 0.7 只算到约 24.5 度、常见的 0.85 也只有 29.8 度，
-			// 观感上明显比 MCA 原版塌，玩家会直接看出"胸部变塌了"。
-			// 改成 54 之后：rotation 到 1 时正好 54 度（等于原版），
-			// 常见的 0.85 落在约 45.9 度，整体挺度与原版持平。
+			// 系数取 50 的由来：MCA 的胸部几何体是固定前倾 54.2 度
+			// （CommonVillagerModel#applyVillagerDimensions 里的 setRotation(0.9424779F, 0, 0)），
+			// 而 FGM 原版这里是 35 —— 换算下来常见尺寸只有约 29.8 度，观感明显比原版塌。
+			// 直接取 54（完全等于原版）试过一版，实机偏前突，最后收到 50：
+			// 最大尺寸落在 50 度，最小尺寸约 27.5 度（尺寸本身的范围见上面的线性映射）。
 			float rotation = breastSize;
 			if (bounceEnabled) {
 				// 按尺寸微微下移，补偿几何盒旋转后视觉重心的偏移
@@ -598,12 +599,12 @@ public class GenderLayer<ENTITY extends LivingEntity, MODEL extends HumanoidMode
 			// 两半才会各自向外张开。若调用方也取一次负，两次负号抵消，两个胸会朝同一侧转。
 			float outwardRad = outwardAngle * Mth.DEG_TO_RAD;
 			// JOML 的链式调用是「右乘」，也就是局部旋转，所以实际生效顺序与书写顺序相反：
-			//   先绕 X 轴前倾（-54 度 × rotation，rotation 越大越挺）
+			//   先绕 X 轴前倾（-50 度 × rotation，rotation 越大越挺）
 			//   再绕 Y 轴向外张开（张角由乳沟参数决定）
 			// 这个顺序很关键：交换两者会让"向外张"变成"绕世界 Y 轴旋转"，姿势立刻失真。
 			Quaternionf rotationTransform = new Quaternionf()
 				.rotationY(left ? outwardRad : -outwardRad)
-				.rotateX(-54F * rotation * Mth.DEG_TO_RAD);
+				.rotateX(-50F * rotation * Mth.DEG_TO_RAD);
 
 			// 呼吸起伏：用一条余弦波驱动额外的前倾角。
 			//   tickCount * 0.09 是相位，周期 = 2π/0.09 ≈ 70 tick ≈ 3.5 秒一次呼吸

@@ -4,7 +4,7 @@ license = "LGPL-3.0-only"
 
 [[mods]]
     modId = "mcabp"
-    version = "0.1.2"
+    version = "0.1.3"
     displayName = "MCA Female Gender Mod"
     logoFile = "logo.png"
     description = '''
