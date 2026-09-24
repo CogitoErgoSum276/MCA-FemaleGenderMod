@@ -1,0 +1,24 @@
+{
+  "mcabp.config.rendering_enabled": "Enable Rendering",
+  "mcabp.config.rendering_enabled.tooltip": "Master switch. When disabled, no villager breasts will be rendered.",
+  "mcabp.config.physics_enabled": "Enable Physics",
+  "mcabp.config.physics_enabled.tooltip": "When disabled, breasts stop bouncing but still render normally.",
+  "mcabp.config.bounce_multiplier": "Wobble Amount",
+  "mcabp.config.bounce_multiplier.tooltip": "Higher values make impacts and jumps cause more movement. Walking sway is not affected.",
+  "mcabp.config.floppy_multiplier": "Wobble Duration",
+  "mcabp.config.floppy_multiplier.tooltip": "Higher values make the wobble last longer after an impact; lower values settle quickly.",
+  "mcabp.config.dual_physics": "Split Sway",
+  "mcabp.config.dual_physics.tooltip": "Each side wobbles on its own for a more natural look. When off, both sides move in perfect sync.",
+  "mcabp.config.show_in_armor": "Show In Armor",
+  "mcabp.config.show_in_armor.tooltip": "When on, breasts stay visible even under chest armor that covers them. When off, the armor hides them.",
+  "mcabp.config.armor_physics_override": "Sway In Armor",
+  "mcabp.config.armor_physics_override.tooltip": "When on, chest armor no longer dampens the wobble. When off, tighter armor means less movement.",
+
+  "gui.villager_editor.page.breast_extra": "Breast",
+  "gene.breastseparation": "Separation",
+  "gene.breastheight": "Height",
+  "gene.breastdepth": "Depth",
+  "gene.breastrotation": "Rotation",
+  "gene.breastgrowth": "Development",
+  "gene.chestinitialized": "Appearance Set"
+}

@@ -1,0 +1,16 @@
+中文名|类型（大小、开关）|英文名|MCA的参数名|FGM的参数名字
+
+服务器同步的参数：
+乳房大小|大小|Breast Size|GeneBreast|bust_size
+分离|大小|Separation|无|breasts_xOffset
+高度|大小|Height|无|breasts_yOffset
+深度|大小|Depth|无|breasts_zOffset
+旋转|大小|Rotation|无|breasts_cleavage
+
+本地参数：
+乳房物理|开关|Breast Physics|无|breast_physics
+对偶物理|开关|Dual-Physics|无|breasts_uniboob
+隐藏在盔甲中|开关|Hide In Armor|无|show_in_armor
+盔甲物理|开关|Armor Physics|无|armor_physics_override
+弹跳强度|大小|Bounce Intensity|无|bounce_multiplier
+乳房动量|大小|Breast Momentum|无|floppy_multiplier

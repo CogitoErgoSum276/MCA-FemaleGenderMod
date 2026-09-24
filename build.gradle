@@ -1,0 +1,78 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'net.neoforged.moddev' version '2.0.78'
+}
+
+group = project.maven_group
+version = project.mod_version
+
+base {
+    archivesName = project.archives_base_name
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+// 清空 ModDevGradle 自动添加的 maven.neoforged.net，该域名在国内访问不稳定
+repositories.clear()
+
+repositories {
+    maven { url = 'https://bmclapi2.bangbang93.com/maven/' }
+    maven { url = 'https://neoforged.forgecdn.net/releases' }
+    maven { url = 'https://neoforged.forgecdn.net/mojang-meta' }
+    mavenCentral()
+    // 本地 MCA jar（libs/mca.jar），保证编译期依赖的游戏版本与实际游玩一致
+    flatDir { dirs 'libs' }
+}
+
+neoForge {
+    version = project.neo_version
+
+    // 访问转换器：把原版私有字段/方法提升为 public。
+    // 目前只有一条 —— LivingEntity#getCurrentSwingDuration，供 BreastPhysics 读取挥手时长
+    accessTransformers.from(file('src/main/resources/META-INF/accesstransformer.cfg'))
+
+    mods {
+        "${project.mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+
+    runs {
+        configureEach {
+            systemProperty 'forge.logging.console.level', 'debug'
+        }
+        client { client() }
+        server { server() }
+    }
+}
+
+dependencies {
+    // MCA Reborn（凡家物语）。
+    //   compileOnly —— 编译期可见；不打进产物，由玩家自行安装 MCA。
+    //   runtimeOnly —— 开发环境（gradlew runClient）启动时加载 MCA；
+    //                  否则本模组会因缺少必需依赖而拒绝加载。同样不打进产物。
+    compileOnly files('libs/mca.jar')
+    runtimeOnly files('libs/mca.jar')
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.named('jar', Jar) {
+    // 发布用的文件名：MCA-FemaleGenderModV0.1.0-neoforge-1.21.1.jar
+    // 不写死字符串，版本号或 MC 版本一改文件名会自动跟着变
+    archiveFileName = "${project.archives_base_name}V${project.mod_version}-neoforge-${project.minecraft_version}.jar"
+
+    manifest {
+        attributes([
+            'Specification-Title'   : project.name,
+            'Specification-Version' : project.mod_version,
+            'Implementation-Title'  : project.name,
+            'Implementation-Version': project.mod_version
+        ])
+    }
+}

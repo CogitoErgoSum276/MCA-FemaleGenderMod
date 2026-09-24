@@ -1,0 +1,24 @@
+{
+  "mcabp.config.rendering_enabled": "启用渲染",
+  "mcabp.config.rendering_enabled.tooltip": "本模组总开关：关闭后所有村民的胸部都不再渲染。",
+  "mcabp.config.physics_enabled": "启用物理",
+  "mcabp.config.physics_enabled.tooltip": "关闭后胸部不再晃动，但仍会正常渲染。",
+  "mcabp.config.bounce_multiplier": "晃动幅度",
+  "mcabp.config.bounce_multiplier.tooltip": "值越大，受击、跳跃等外力造成的晃动越剧烈。注意：行走时的起伏不受此项影响。",
+  "mcabp.config.floppy_multiplier": "晃动时长",
+  "mcabp.config.floppy_multiplier.tooltip": "值越大，受到冲击后晃得越久；调小则晃两下就停。",
+  "mcabp.config.dual_physics": "左右独立晃动",
+  "mcabp.config.dual_physics.tooltip": "开启后左右两侧各自独立晃动，互不同步、更生动；关闭时两侧完全一致。",
+  "mcabp.config.show_in_armor": "穿甲时胸不隐藏",
+  "mcabp.config.show_in_armor.tooltip": "开启后，就算穿着盖住胸部的胸甲，胸部也照常显示；关闭时会被胸甲遮住。",
+  "mcabp.config.armor_physics_override": "穿甲时可以晃动",
+  "mcabp.config.armor_physics_override.tooltip": "开启后忽略胸甲的束缚，穿甲也照常晃动；关闭时胸甲越紧晃动被削弱得越厉害。",
+
+  "gui.villager_editor.page.breast_extra": "更多胸部设定",
+  "gene.breastseparation": "分离",
+  "gene.breastheight": "高度",
+  "gene.breastdepth": "深度",
+  "gene.breastrotation": "旋转",
+  "gene.breastgrowth": "发育度",
+  "gene.chestinitialized": "外观初始化"
+}

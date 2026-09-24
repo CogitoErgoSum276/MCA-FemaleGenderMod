@@ -1,0 +1,40 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "LGPL-3.0-only"
+
+[[mods]]
+    modId = "mcabp"
+    version = "0.1.0"
+    displayName = "MCA Female Gender Mod"
+    logoFile = "logo.png"
+    description = '''
+为凡家物语（MCA）的女性 NPC 提供胸部外观、物理模拟与发育参数。
+
+【重要】必须客户端与服务端同时安装本模组 —— 它会向 MCA 的基因池追加同步字段，
+只装一端会导致村民的同步数据错位。
+
+本模组基于 Female Gender Mod（LGPL-3.0）移植并修改而来。
+'''
+    authors = "cogitoergosun024"
+    credits = "基于 WildfireRomeo 的 Female Gender Mod（LGPL-3.0）移植与修改。"
+
+[[dependencies.mcabp]]
+    modId = "minecraft"
+    type = "required"
+    versionRange = "[1.21.1]"
+    side = "BOTH"
+[[dependencies.mcabp]]
+    modId = "neoforge"
+    type = "required"
+    versionRange = "[21.1.234,)"
+    side = "BOTH"
+[[dependencies.mcabp]]
+    modId = "mca"
+    type = "required"
+    versionRange = "[7.7.0,8.0.0)"
+    side = "BOTH"
+
+# Mixin 配置：向 MCA 的村民编辑器注入「更多胸部设定」页（4 滑块 + 5 开关），
+# 以及基因随机分布、怀孕二次发育两处逻辑
+[[mixins]]
+    config = "mcabp.mixins.json"

@@ -1,0 +1,43 @@
+# ---- Gradle ----
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ---- IDE ----
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+bin/
+out/
+
+# ---- 第三方依赖 ----
+# libs/mca.jar 是 MCA（凡家物语）的发布 jar，约 11.6 MB。
+# 它是编译期必需的输入，但属于第三方作品，不适合由本仓库分发；
+# 而且 MCA 一升级，旧 jar 会永久留在 Git 历史里。克隆后请自行下载放入（见 README）。
+libs/
+
+# ---- 开发用的运行环境 ----
+# run/ 是开发时启动游戏的目录，里面是存档、日志、测试用的其它 mod，
+# 体积可能达到几个 GB，绝对不能提交
+run/
+runs/
+server/
+
+# ---- 日志与崩溃报告 ----
+*.log
+logs/
+crash-reports/
+
+# ---- 系统文件 ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- JVM ----
+hs_err_pid*
+replay_pid*
